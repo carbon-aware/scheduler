@@ -12,6 +12,11 @@ async def root():
     return {"message": "Carbon-Aware Scheduler"}
 
 
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
 def main():
     uvicorn.run("src.main:app", host="0.0.0.0", port=8080, reload=True, timeout_keep_alive=30)
 
