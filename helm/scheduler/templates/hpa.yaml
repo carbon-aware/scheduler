@@ -1,0 +1,33 @@
+{{- if and .Values.scheduler.enabled .Values.scheduler.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "scheduler.fullname" . }}
+  labels:
+    {{- include "scheduler.labels" . | nindent 4 }}
+    app.kubernetes.io/component: scheduler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "scheduler.fullname" . }}
+  minReplicas: {{ .Values.scheduler.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.scheduler.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.scheduler.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.scheduler.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.scheduler.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.scheduler.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
