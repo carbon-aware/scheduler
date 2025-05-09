@@ -27,3 +27,10 @@ jobs:
           files: dist/*.tgz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger index update in carbon-aware/charts
+        run: |
+          curl -X POST https://api.github.com/repos/carbon-aware/charts/dispatches \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: token ${{ secrets.CARBON_AWARE_CHARTS_PAT }}" \
+            -d '{"event_type":"chart-released"}'
