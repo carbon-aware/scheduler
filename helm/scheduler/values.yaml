@@ -21,7 +21,7 @@ scheduler:
   image:
     repository: ghcr.io/carbon-aware/scheduler/backend
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: ""
   service:
     type: ClusterIP
     port: 8080

@@ -15,6 +15,7 @@ k8s_yaml(helm(
     './helm/scheduler',
     name='scheduler',
     namespace='default',
+    set=["scheduler.image.tag=latest"]
 ))
 
 
