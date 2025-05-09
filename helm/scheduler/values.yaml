@@ -25,6 +25,10 @@ scheduler:
   service:
     type: ClusterIP
     port: 8080
+  ingress:
+    enabled: false
+    globalStaticIpName: ""
+    host: ""
   resources:
     limits:
       cpu: 500m

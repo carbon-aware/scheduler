@@ -1,0 +1,23 @@
+{{- if .Values.scheduler.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "scheduler.fullname" . }}
+  labels:
+    {{- include "scheduler.labels" . | nindent 4 }}
+    app.kubernetes.io/component: scheduler
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.scheduler.ingress.globalStaticIpName }}
+spec:
+  rules:
+  - host: {{ .Values.scheduler.ingress.host }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "scheduler.fullname" . }}
+            port:
+              number: {{ .Values.scheduler.service.port }}
+{{- end }}
