@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: carbon-aware/scheduler
+  IMAGE_NAME: carbon-aware/scheduler/backend
 
 jobs:
   build-and-push:
