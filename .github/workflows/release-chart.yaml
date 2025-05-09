@@ -28,9 +28,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Trigger index update in carbon-aware/charts
-        run: |
-          curl -X POST https://api.github.com/repos/carbon-aware/charts/dispatches \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: token ${{ secrets.CARBON_AWARE_CHARTS_PAT }}" \
-            -d '{"event_type":"chart-released"}'
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CARBON_AWARE_CHARTS_PAT }}
+          repository: carbon-aware/charts
+          event-type: chart-released
