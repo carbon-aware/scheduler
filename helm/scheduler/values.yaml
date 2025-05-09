@@ -19,7 +19,7 @@ scheduler:
   enabled: true
   replicaCount: 1
   image:
-    repository: ghcr.io/carbon-aware/scheduler
+    repository: ghcr.io/carbon-aware/scheduler/backend
     pullPolicy: IfNotPresent
     tag: "latest"
   service:

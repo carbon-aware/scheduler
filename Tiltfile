@@ -6,7 +6,7 @@ create_secret('scheduler/.env', 'carbon-aware-scheduler', 'default')
 
 # -- Build the scheduler image
 docker_build(
-    'ghcr.io/carbon-aware/scheduler:latest',
+    'ghcr.io/carbon-aware/scheduler/backend:latest',
     'scheduler',
 )
 
