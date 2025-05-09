@@ -11,14 +11,22 @@ async def main():
                     "end": (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)).isoformat()
                 }
             ],
-            "duration": "PT1H",
+            "duration": "PT3H",
             "zones": [
                 {
                     "provider": "aws",
                     "region": "us-west-1",
-                }
+                },
+                {
+                    "provider": "aws",
+                    "region": "us-east-1",
+                },
+                {
+                    "provider": "aws",
+                    "region": "eu-central-1",
+                },
             ],
-            "num_options": 1
+            "num_options": 3
         })
         print(response.json())
 

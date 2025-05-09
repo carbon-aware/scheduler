@@ -55,6 +55,7 @@ scheduler:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  secretName: "carbon-aware-scheduler"
 
 # Memcached configuration
 memcached:
