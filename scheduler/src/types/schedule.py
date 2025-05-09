@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel, Field, model_validator
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class CloudProvider(Enum):
@@ -24,6 +24,9 @@ class CloudZone(BaseModel):
     provider: CloudProvider
     region: AwsRegion | GcpRegion | AzureRegion
 
+    def __hash__(self):
+        return hash((self.provider, self.region))
+
     @model_validator(mode="after")
     def validate_region(self) -> 'CloudZone':
         try:
@@ -46,7 +49,7 @@ class TimeRange(BaseModel):
 
 class ScheduleRequest(BaseModel):
     windows: list[TimeRange]
-    duration: str
+    duration: timedelta
     zones: list[CloudZone]
     num_options: int | None = Field(default=3)
 
