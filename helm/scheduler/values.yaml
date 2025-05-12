@@ -59,7 +59,16 @@ scheduler:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  secretName: "carbon-aware-scheduler"
+  # WattTime API credentials
+  watttime:
+    # Set to true to use existing secrets instead of creating new ones
+    existingSecret:
+      name: ""
+    # Set credentials directly (will be stored in a Secret)
+    credentials:
+      username: ""
+      password: ""
+  
 
 # Memcached configuration
 memcached:

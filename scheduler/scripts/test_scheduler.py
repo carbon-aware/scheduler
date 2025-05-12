@@ -4,7 +4,7 @@ import httpx
 
 async def main():
     async with httpx.AsyncClient() as client:
-        response = await client.post("http://localhost:8080/v0/schedule/", json={
+        response = await client.post("http://scheduler.carbonaware.dev/v0/schedule/", json={
             "windows": [
                 {
                     "start": datetime.datetime.now(datetime.timezone.utc).isoformat(),

@@ -44,10 +44,12 @@ spec:
             - name: MEMCACHED_PORT
               value: "{{ .Values.memcached.service.port }}"
           envFrom:
-            {{- if .Values.scheduler.secretName }}
             - secretRef:
-                name: {{ .Values.scheduler.secretName }}
-            {{- end }}
+                {{- if .Values.scheduler.watttime.existingSecret.name }}
+                name: {{ .Values.scheduler.watttime.existingSecret.name }}
+                {{- else }}
+                name: {{ include "scheduler.fullname" . }}-watttime
+                {{- end }}
           {{- with .Values.scheduler.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
