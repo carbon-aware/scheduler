@@ -15,7 +15,7 @@ k8s_yaml(helm(
     './helm/scheduler',
     name='scheduler',
     namespace='default',
-    set=["scheduler.image.tag=latest"]
+    set=["scheduler.image.tag=latest", "scheduler.watttime.existingSecret.name=carbon-aware-scheduler"]
 ))
 
 

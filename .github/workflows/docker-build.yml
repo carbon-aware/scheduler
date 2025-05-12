@@ -70,7 +70,7 @@ jobs:
             echo "tag=${TAG}" >> $GITHUB_OUTPUT
           fi
           echo "Using tag: ${TAG}"
-      
+
       # Build and push using Docker action
       - name: Build and push Docker image
         uses: docker/build-push-action@v6

@@ -1,5 +1,6 @@
 import enum
-from src.types.schedule import CloudZone, CloudProvider, AwsRegion
+
+from src.types.schedule import AwsRegion, CloudProvider, CloudZone
 
 
 class PowerZone(enum.Enum):

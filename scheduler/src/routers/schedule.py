@@ -13,6 +13,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/")
+
+@router.post("/")  # type: ignore[misc]
 async def schedule(request: ScheduleRequest) -> ScheduleResponse:
     return await compute_schedule(request)

@@ -1,0 +1,13 @@
+---
+extends: relaxed
+
+rules:
+  line-length:
+    max: 120
+    level: warning
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+  document-start: disable
+  truthy:
+    allowed-values: ['true', 'false', 'yes', 'no']

@@ -1,7 +1,7 @@
 [project]
 name = "scheduler"
 version = "0.1.0"
-description = "Add your description here"
+description = "Carbon Aware job scheduler for optimizing workloads based on carbon intensity forecasts"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -11,4 +11,18 @@ dependencies = [
     "pydantic-settings>=2.9.1",
     "pymemcache>=4.0.0",
     "uvicorn>=0.34.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=3.5.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.8.0",
+    "ruff>=0.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
 ]

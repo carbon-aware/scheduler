@@ -1,34 +1,131 @@
-# scheduler
-Carbon Aware job scheduler
+# Carbon Aware Scheduler
 
-## Installation
+A Kubernetes-native scheduler that optimizes job execution based on carbon intensity forecasts from WattTime API. This scheduler helps reduce the carbon footprint of your workloads by scheduling them during periods of lower carbon intensity.
+
+## Features
+
+- Carbon-aware job scheduling based on WattTime API forecasts
+- Support for multiple cloud regions and time windows
+- Calculation of carbon savings compared to worst-case, naive, and median scheduling options
+- Kubernetes-native deployment via Helm chart
+
+don## Installation
+
+### Prerequisites
+
+- Kubernetes cluster (v1.19+)
+- Helm v3+
+- WattTime API credentials
+
+### Installing from Chart Repository
 
 You can install the carbon-aware scheduler via Helm:
 
-```
+```bash
+# Add the carbon-aware Helm repository
 helm repo add carbon-aware https://carbon-aware.github.io/charts
-helm install ca-scheduler -n carbon-aware carbon-aware/scheduler
+
+# Update your Helm repositories
+helm repo update
+
+# Install the scheduler chart (replace <namespace> with your target namespace)
+helm install ca-scheduler -n <namespace> carbon-aware/scheduler
 ```
 
-Ensure you've included WattTime credentials in a secret in your carbon-aware namespace.
+### Installing from Local Chart
+
+To install the chart from a local clone of this repository:
+
+```bash
+# Clone the repository
+git clone https://github.com/carbon-aware/scheduler.git
+cd scheduler
+
+# Install the chart
+helm install ca-scheduler -n <namespace> ./helm/scheduler
+```
+
+### Configuration
+
+Ensure you've included WattTime credentials in a secret in your namespace. Create a secret with your WattTime credentials:
+
+```bash
+kubectl create secret generic watttime-credentials \
+  --from-literal=username=your-username \
+  --from-literal=password=your-password \
+  -n <namespace>
+```
+
+Refer to the `values.yaml` file in the chart for additional configuration options.
 
 ## Development
 
 ### Prerequisites
 
-- Tilt
-- kubectl
-- kind
-- ctlptl
+- Python 3.13+
+- [Tilt](https://tilt.dev/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [kind](https://kind.sigs.k8s.io/)
+- [ctlptl](https://github.com/tilt-dev/ctlptl)
 
-### Usage
+### Setting Up Development Environment
 
-1. Start a kind cluster
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/carbon-aware/scheduler.git
+   cd scheduler
+   ```
+
+2. Run the setup script to set up your development environment:
+   ```bash
+   # Make the script executable
+   chmod +x scripts/setup-dev.sh
+   # Run the setup script
+   ./scripts/setup-dev.sh
+   ```
+
+   This script will:
+   - Check for uv installation
+   - Create and activate a Python virtual environment
+   - Install project dependencies using uv sync
+   - Set up pre-commit hooks
+
+### Local Development with Tilt
+
+1. Start a kind cluster:
+   ```bash
+   ctlptl create cluster kind --name kind-ca-scheduler
+   ```
+
+2. Start Tilt:
+   ```bash
+   tilt up
+   ```
+
+3. Access the scheduler API at: http://localhost:8080
+
+### Running Tests
+
 ```bash
-ctlptl create cluster kind --name kind-ca-scheduler
+python -m pytest
 ```
 
-2. Start Tilt
+### Building the Docker Image
+
 ```bash
-tilt up
+docker build -t carbon-aware/scheduler:dev ./scheduler
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the LICENSE file for details.

@@ -68,7 +68,7 @@ scheduler:
     credentials:
       username: ""
       password: ""
-  
+
 
 # Memcached configuration
 memcached:
