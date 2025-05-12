@@ -22,7 +22,31 @@ class GcpRegion(Enum):
 
 
 class AzureRegion(Enum):
-    pass
+    eastus = "eastus"
+    eastus2 = "eastus2"
+    southcentralus = "southcentralus"
+    westus2 = "westus2"
+    westus3 = "westus3"
+    northeurope = "northeurope"
+    swedencentral = "swedencentral"
+    uksouth = "uksouth"
+    westeurope = "westeurope"
+    centralus = "centralus"
+    francecentral = "francecentral"
+    germanywestcentral = "germanywestcentral"
+    italynorth = "italynorth"
+    norwayeast = "norwayeast"
+    polandcentral = "polandcentral"
+    eastus2euap = "eastus2euap"
+    eastusstg = "eastusstg"
+    northcentralus = "northcentralus"
+    westus = "westus"
+    centraluseuap = "centraluseuap"
+    westcentralus = "westcentralus"
+    francesouth = "francesouth"
+    germanynorth = "germanynorth"
+    norwaywest = "norwaywest"
+    ukwest = "ukwest"
 
 
 class CloudZone(BaseModel):
