@@ -1,6 +1,9 @@
 import enum
+import logging
 
 from src.types.schedule import AwsRegion, CloudProvider, CloudZone
+
+logger = logging.getLogger(__name__)
 
 
 class PowerZone(enum.Enum):
@@ -23,4 +26,6 @@ def convert_cloud_zone_to_power_zone(cloud_zone: CloudZone) -> PowerZone:
 
 
 def convert_power_zone_to_cloud_zones(power_zone: PowerZone) -> list[CloudZone]:
-    return [cloud for cloud, power in _power_zone_map.items() if power == power_zone]
+    ret = [cloud for cloud, power in _power_zone_map.items() if power == power_zone]
+    logger.warning(f"{ret=}")
+    return ret

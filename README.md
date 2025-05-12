@@ -9,7 +9,7 @@ A Kubernetes-native scheduler that optimizes job execution based on carbon inten
 - Calculation of carbon savings compared to worst-case, naive, and median scheduling options
 - Kubernetes-native deployment via Helm chart
 
-don## Installation
+## Installation
 
 ### Prerequisites
 

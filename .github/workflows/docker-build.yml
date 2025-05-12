@@ -79,6 +79,7 @@ jobs:
           context: ./scheduler
           file: ./scheduler/Dockerfile
           push: true
+          target: hosted
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

@@ -84,3 +84,30 @@ async def get_forecast(region: str, horizon_hours: int) -> dict[str, Any]:
             raise Exception(f"Failed to fetch forecast: {response.status_code} {response.text}")
 
         return cast(dict[str, Any], response.json())
+
+
+async def get_regions() -> list[dict[str, Any]]:
+    """
+    Fetch list of available regions from the WattTime API using credentials from settings.
+
+    Returns:
+        List of region codes
+
+    Raises:
+        Exception: If the API request fails
+    """
+    # Get authentication token
+    token = await _get_auth_token()
+
+    # Fetch regions data
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://api.watttime.org/v3/my-access",
+            headers={"Authorization": f"Bearer {token}"},
+            params={"signal_type": "co2_moer"},
+        )
+
+        if response.status_code != httpx.codes.OK:
+            raise Exception(f"Failed to fetch regions: {response.status_code} {response.text}")
+
+        return cast(list[dict[str, Any]], response.json()["signal_types"][0]["regions"])

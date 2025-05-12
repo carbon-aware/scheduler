@@ -8,6 +8,13 @@ create_secret('scheduler/.env', 'carbon-aware-scheduler', 'default')
 docker_build(
     'ghcr.io/carbon-aware/scheduler/backend:latest',
     'scheduler',
+    live_update=[
+        sync(
+            "./scheduler/src",
+            "/app/src",
+        ),
+    ],
+    target="local"
 )
 
 # --- Deploy Helm chart ---
