@@ -1,8 +1,12 @@
+import logging
+
 import uvicorn
 from fastapi import FastAPI
 
 from src.routers.regions import router as regions_router
 from src.routers.schedule import router as schedule_router
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="Carbon-Aware Scheduler")
 app.include_router(schedule_router, prefix="/v0")

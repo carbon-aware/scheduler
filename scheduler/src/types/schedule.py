@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from enum import Enum
 
 from pydantic import BaseModel, Field, model_validator
@@ -83,7 +83,7 @@ class TimeRange(BaseModel):
 
     @model_validator(mode="after")
     def validate_time_range(self) -> TimeRange:
-        if self.start < datetime.now():
+        if self.start < datetime.now(UTC):
             raise ValueError("Start time must be in the future")
         if self.start >= self.end:
             raise ValueError("Start time must be before end time")
