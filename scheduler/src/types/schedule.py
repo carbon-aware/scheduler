@@ -18,7 +18,7 @@ class AwsRegion(Enum):
 
 
 class GcpRegion(Enum):
-    pass
+    us_central1 = "us-central1"
 
 
 class AzureRegion(Enum):

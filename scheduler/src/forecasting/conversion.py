@@ -1,7 +1,7 @@
 import enum
 import logging
 
-from src.types.schedule import AwsRegion, AzureRegion, CloudProvider, CloudZone
+from src.types.schedule import AwsRegion, AzureRegion, CloudProvider, CloudZone, GcpRegion
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,9 @@ _power_zone_map: dict[CloudZone, PowerZone] = {
     CloudZone(provider=CloudProvider.AZURE, region=AzureRegion("germanynorth")): PowerZone.DE,
     CloudZone(provider=CloudProvider.AZURE, region=AzureRegion("norwaywest")): PowerZone.NO,
     CloudZone(provider=CloudProvider.AZURE, region=AzureRegion("ukwest")): PowerZone.UK,
+    CloudZone(
+        provider=CloudProvider.GCP, region=GcpRegion("us-central1")
+    ): PowerZone.MISO_MASON_CITY,
 }
 
 
