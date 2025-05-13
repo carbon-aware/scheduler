@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from enum import Enum
 
@@ -57,7 +59,7 @@ class CloudZone(BaseModel):
         return hash((self.provider, self.region))
 
     @model_validator(mode="after")
-    def validate_region(self) -> "CloudZone":
+    def validate_region(self) -> CloudZone:
         try:
             if self.provider == CloudProvider.AWS:
                 AwsRegion(self.region)
@@ -79,9 +81,19 @@ class TimeRange(BaseModel):
     start: datetime
     end: datetime
 
+    @model_validator(mode="after")
+    def validate_time_range(self) -> TimeRange:
+        if self.start < datetime.now():
+            raise ValueError("Start time must be in the future")
+        if self.start >= self.end:
+            raise ValueError("Start time must be before end time")
+        return self
+
 
 class ScheduleRequest(BaseModel):
-    windows: list[TimeRange]
+    windows: list[TimeRange] = Field(
+        ..., description="List of time windows to schedule (start and end must be in the future)"
+    )
     duration: timedelta = Field(..., examples=["PT1H"])
     zones: list[CloudZone]
     num_options: int | None = Field(default=3)
