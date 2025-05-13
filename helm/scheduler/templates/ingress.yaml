@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/component: scheduler
   annotations:
     kubernetes.io/ingress.global-static-ip-name: {{ .Values.scheduler.ingress.globalStaticIpName }}
+    {{- toYaml .Values.scheduler.ingress.annotations | nindent 4 }}
 spec:
   rules:
   - host: {{ .Values.scheduler.ingress.host }}

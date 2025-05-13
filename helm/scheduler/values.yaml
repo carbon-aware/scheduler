@@ -29,6 +29,7 @@ scheduler:
     enabled: false
     globalStaticIpName: ""
     host: ""
+    annotations: {}
   resources:
     limits:
       cpu: 500m
