@@ -82,7 +82,7 @@ class TimeRange(BaseModel):
 
 class ScheduleRequest(BaseModel):
     windows: list[TimeRange]
-    duration: timedelta
+    duration: timedelta = Field(..., examples=["PT1H"])
     zones: list[CloudZone]
     num_options: int | None = Field(default=3)
 
