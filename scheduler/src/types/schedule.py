@@ -84,13 +84,17 @@ class TimeRange(BaseModel):
     @model_validator(mode="after")
     def validate_time_range(self) -> TimeRange:
         # convert start and end to UTC if they are naive
-        if self.start.tzinfo is None:
+        tz_unset = self.start.tzinfo is None or self.end.tzinfo is None
+        if tz_unset:
             self.start = self.start.replace(tzinfo=UTC)
-        if self.end.tzinfo is None:
             self.end = self.end.replace(tzinfo=UTC)
 
-        if self.start < datetime.now(UTC):
-            raise ValueError("Start time must be in the future")
+        if self.start < datetime.now(UTC) - timedelta(minutes=5):
+            if tz_unset:
+                raise ValueError(
+                    "Start time must be in the future. Note that timezone was unset and UTC was assumed."
+                )
+            raise ValueError("Start time must be in the future.")
         if self.start >= self.end:
             raise ValueError("Start time must be before end time")
         return self
