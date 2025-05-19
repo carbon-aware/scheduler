@@ -16,6 +16,7 @@ class AwsRegion(Enum):
     us_east_1 = "us-east-1"
     us_west_1 = "us-west-1"
     eu_central_1 = "eu-central-1"
+    ap_southeast_2 = "ap-southeast-2"
 
 
 class GcpRegion(Enum):
