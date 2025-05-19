@@ -10,7 +10,6 @@ class PowerZone(enum.Enum):
     PJM_DC = "PJM_DC"
     CAISO_NORTH = "CAISO_NORTH"
     DE = "DE"
-    NEM_NSW = "NEM_NSW"
     SE = "SE"
     IE = "IE"
     PL = "PL"
@@ -32,7 +31,6 @@ _power_zone_map: dict[CloudZone, PowerZone] = {
     CloudZone(provider=CloudProvider.AWS, region=AwsRegion("us-east-1")): PowerZone.PJM_DC,
     CloudZone(provider=CloudProvider.AWS, region=AwsRegion("us-west-1")): PowerZone.CAISO_NORTH,
     CloudZone(provider=CloudProvider.AWS, region=AwsRegion("eu-central-1")): PowerZone.DE,
-    CloudZone(provider=CloudProvider.AWS, region=AwsRegion("ap-southeast-2")): PowerZone.NEM_NSW,
     CloudZone(provider=CloudProvider.AZURE, region=AzureRegion("eastus")): PowerZone.PJM_ROANOKE,
     CloudZone(provider=CloudProvider.AZURE, region=AzureRegion("eastus2")): PowerZone.PJM_DC,
     CloudZone(
