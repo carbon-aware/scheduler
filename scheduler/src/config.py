@@ -7,7 +7,7 @@ class WattTimeSettings(BaseSettings):
     Settings for WattTime API authentication.
     """
 
-    username: str = Field(..., alias="WATTTIME_USERNAME")
+    username: str = Field(..., alias="WATTTIME_USER")
     password: str = Field(..., alias="WATTTIME_PASSWORD")
 
 
