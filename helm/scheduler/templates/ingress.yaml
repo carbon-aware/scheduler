@@ -1,4 +1,12 @@
 {{- if .Values.scheduler.ingress.enabled }}
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: {{ include "scheduler.fullname" . }}-cert
+spec:
+  domains:
+    - {{ .Values.scheduler.ingress.host }}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -8,6 +16,8 @@ metadata:
     app.kubernetes.io/component: scheduler
   annotations:
     kubernetes.io/ingress.global-static-ip-name: {{ .Values.scheduler.ingress.globalStaticIpName }}
+    networking.gke.io/managed-certificates: {{ include "scheduler.fullname" . }}-cert
+    kubernetes.io/ingress.class: "gce"
     {{- toYaml .Values.scheduler.ingress.annotations | nindent 4 }}
 spec:
   rules:
