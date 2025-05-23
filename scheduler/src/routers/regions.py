@@ -34,5 +34,4 @@ async def regions() -> RegionResponse:
 
         regions.update(convert_power_zone_to_cloud_zones(power_zone))
 
-    logger.warning(f"{regions=}")
     return RegionResponse(regions=list(regions))

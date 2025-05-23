@@ -20,15 +20,12 @@ async def compute_schedule(request: ScheduleRequest) -> ScheduleResponse:
     """Computes the best schedule for the given request."""
     # fetch forecast
     forecast_df = await fetch_forecast(request.zones, request.windows)
-    logger.warning(f"Fetched forecast: {forecast_df}")
 
     # trim forecast to windows
     trimmed_forecast_df = _trim_forecast_to_windows(forecast_df, request.windows, request.duration)
-    logger.warning(f"Trimmed forecast to windows: {trimmed_forecast_df}")
 
     # rollup forecast to windows (rolling average of duration)
     rolled_forecast_df = _rollup_forecast_to_job_duration(trimmed_forecast_df, request.duration)
-    logger.warning(f"Rolled forecast to job duration: {rolled_forecast_df}")
 
     # If we don't have any forecast data, return an error
     if rolled_forecast_df.empty:
