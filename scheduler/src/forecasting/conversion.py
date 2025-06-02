@@ -76,7 +76,13 @@ def convert_cloud_zone_to_power_zone(cloud_zone: CloudZone) -> PowerZone:
     return _power_zone_map[cloud_zone]
 
 
-def convert_power_zone_to_cloud_zones(power_zone: PowerZone) -> list[CloudZone]:
-    ret = [cloud for cloud, power in _power_zone_map.items() if power == power_zone]
+def convert_power_zone_to_cloud_zones(
+    power_zone: PowerZone, allowed_zones: list[CloudZone]
+) -> list[CloudZone]:
+    ret = [
+        cloud
+        for cloud, power in _power_zone_map.items()
+        if power == power_zone and cloud in allowed_zones
+    ]
     logger.debug(f"Conversion results: {ret}")
     return ret

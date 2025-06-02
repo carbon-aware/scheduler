@@ -38,7 +38,7 @@ async def compute_schedule(request: ScheduleRequest) -> ScheduleResponse:
     result_rows = []
     for _, row in rolled_forecast_df.iterrows():
         power_zone = PowerZone(row["power_zone"])
-        cloud_zones = convert_power_zone_to_cloud_zones(power_zone)
+        cloud_zones = convert_power_zone_to_cloud_zones(power_zone, allowed_zones=request.zones)
 
         for cloud_zone in cloud_zones:
             result_rows.append(
