@@ -1,59 +1,19 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
-from enum import Enum
 
 from pydantic import BaseModel, Field, model_validator
 
-
-class CloudProvider(Enum):
-    AWS = "aws"
-    GCP = "gcp"
-    AZURE = "azure"
-
-
-class AwsRegion(Enum):
-    us_east_1 = "us-east-1"
-    us_west_1 = "us-west-1"
-    eu_central_1 = "eu-central-1"
-    ap_southeast_2 = "ap-southeast-2"
-
-
-class GcpRegion(Enum):
-    us_central1 = "us-central1"
-
-
-class AzureRegion(Enum):
-    eastus = "eastus"
-    eastus2 = "eastus2"
-    southcentralus = "southcentralus"
-    westus2 = "westus2"
-    westus3 = "westus3"
-    northeurope = "northeurope"
-    swedencentral = "swedencentral"
-    uksouth = "uksouth"
-    westeurope = "westeurope"
-    centralus = "centralus"
-    francecentral = "francecentral"
-    germanywestcentral = "germanywestcentral"
-    italynorth = "italynorth"
-    norwayeast = "norwayeast"
-    polandcentral = "polandcentral"
-    eastus2euap = "eastus2euap"
-    eastusstg = "eastusstg"
-    northcentralus = "northcentralus"
-    westus = "westus"
-    centraluseuap = "centraluseuap"
-    westcentralus = "westcentralus"
-    francesouth = "francesouth"
-    germanynorth = "germanynorth"
-    norwaywest = "norwaywest"
-    ukwest = "ukwest"
+from src.regions.aws import AwsRegion
+from src.regions.azure import AzureRegion
+from src.regions.gcp import GcpRegion
+from src.regions.ovh import OvhRegion
+from src.regions.provider import CloudProvider
 
 
 class CloudZone(BaseModel):
     provider: CloudProvider
-    region: AwsRegion | GcpRegion | AzureRegion
+    region: AwsRegion | GcpRegion | AzureRegion | OvhRegion
 
     def __hash__(self) -> int:
         return hash((self.provider, self.region))
@@ -67,6 +27,8 @@ class CloudZone(BaseModel):
                 GcpRegion(self.region)
             elif self.provider == CloudProvider.AZURE:
                 AzureRegion(self.region)
+            elif self.provider == CloudProvider.OVH:
+                OvhRegion(self.region)
             else:
                 raise ValueError(f"Invalid provider: {self.provider}")
         except ValueError as e:
