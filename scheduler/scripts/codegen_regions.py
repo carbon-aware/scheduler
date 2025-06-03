@@ -1,6 +1,8 @@
 import asyncio
 import json
 import logging
+import pathlib
+from typing import cast
 
 import httpx
 from src.utils.wattime import _get_auth_token
@@ -25,7 +27,7 @@ async def region_from_loc(latitude: float, longitude: float, token: str) -> str 
             )
             return None
 
-        return response.json().get("region")
+        return cast(str, response.json().get("region"))
 
 
 async def electricity_map_zone_to_cloud_power_zone_pair(
@@ -42,23 +44,23 @@ async def electricity_map_zone_to_cloud_power_zone_pair(
 async def get_regions() -> list[dict]:
     async with httpx.AsyncClient() as client:
         response = await client.get(ELECTRICITY_MAPS_REGIONS_JSON)
-        return response.json().values()
+        return cast(list[dict], response.json().values())
 
 
-async def write_regions(pairs: list[tuple[tuple[str, str], str]]):
+async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
     # Write power zones to file
-    power_zones = set([pair[1] for pair in pairs])
-    with open("src/regions/power_zones.py", "w") as f:
+    power_zones = {pair[1] for pair in pairs}
+    with pathlib.Path("src/regions/power_zones.py").open("w") as f:
         f.write("from enum import Enum\n\n")
         f.write("class PowerZone(Enum):\n")
         for power_zone in power_zones:
             f.write(f"    {power_zone} = '{power_zone}'\n")
 
     # Write cloud regions to files
-    unique_providers = set([pair[0][0] for pair in pairs])
+    unique_providers = {pair[0][0] for pair in pairs}
     for provider in unique_providers:
-        provider_regions = set([pair[0][1] for pair in pairs if pair[0][0] == provider])
-        with open(f"src/regions/{provider.lower()}.py", "w") as f:
+        provider_regions = {pair[0][1] for pair in pairs if pair[0][0] == provider}
+        with pathlib.Path(f"src/regions/{provider.lower()}.py").open("w") as f:
             f.write("from enum import Enum\n\n")
             f.write(f"class {provider.capitalize()}Region(Enum):\n")
             for cloud_region in provider_regions:
@@ -66,11 +68,11 @@ async def write_regions(pairs: list[tuple[tuple[str, str], str]]):
                 f.write(f"    {cloud_region_python} = '{cloud_region}'\n")
 
     # Write cloud zone to power zone mapping to file
-    with open("src/regions/mapping.json", "w") as f:
+    with pathlib.Path("src/regions/mapping.json").open("w") as f:
         json.dump(pairs, f)
 
 
-async def main():
+async def main() -> None:
     # Fetch regions from the ElectricityMaps GH
     regions = await get_regions()
 
@@ -81,7 +83,10 @@ async def main():
     )
 
     # Filter out None values
-    filtered_pairs = [pair for pair in cloud_zone_to_power_zone_pairs if pair[1] is not None]
+    filtered_pairs = cast(
+        list[tuple[tuple[str, str], str]],
+        [pair for pair in cloud_zone_to_power_zone_pairs if pair[1] is not None],
+    )
 
     # Write to files
     await write_regions(filtered_pairs)
