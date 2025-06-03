@@ -69,7 +69,7 @@ async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
 
     # Write cloud zone to power zone mapping to file
     with pathlib.Path("src/regions/mapping.json").open("w") as f:
-        json.dump(pairs, f)
+        json.dump(pairs, f, indent=2)
 
 
 async def main() -> None:

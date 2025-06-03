@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 def _load_power_zone_map() -> dict[CloudZone, PowerZone]:
-    current_dir = pathlib.Path(__file__).parent
-    with (current_dir / "../regions/mapping.json").open("r") as f:
+    mapping_path = pathlib.Path(__file__).parents[1] / 'regions' / 'mapping.json'
+    with mapping_path.open("r") as f:
         raw_map = json.load(f)
 
     return {
