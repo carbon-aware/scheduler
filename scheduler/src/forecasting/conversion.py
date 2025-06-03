@@ -33,5 +33,5 @@ def convert_power_zone_to_cloud_zones(
         for cloud, power in _power_zone_map.items()
         if power == power_zone and (allowed_zones is None or cloud in allowed_zones)
     ]
-    logger.debug(f"Conversion results: {ret}")
+    logger.debug(f"Converted {power_zone} to {ret}")
     return ret
