@@ -53,7 +53,9 @@ async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
     with pathlib.Path("src/regions/power_zones.py").open("w") as f:
         f.write("from enum import Enum\n\n")
         f.write("class PowerZone(Enum):\n")
-        for power_zone in power_zones:
+        # sort power zones alphabetically
+        power_zones_sorted = sorted(power_zones)
+        for power_zone in power_zones_sorted:
             f.write(f"    {power_zone} = '{power_zone}'\n")
 
     # Write cloud regions to files
@@ -63,13 +65,16 @@ async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
         with pathlib.Path(f"src/regions/{provider.lower()}.py").open("w") as f:
             f.write("from enum import Enum\n\n")
             f.write(f"class {provider.capitalize()}Region(Enum):\n")
-            for cloud_region in provider_regions:
+            # sort regions alphabetically
+            provider_regions_sorted = sorted(provider_regions)
+            for cloud_region in provider_regions_sorted:
                 cloud_region_python = cloud_region.replace("-", "_")
                 f.write(f"    {cloud_region_python} = '{cloud_region}'\n")
 
     # Write cloud zone to power zone mapping to file
     with pathlib.Path("src/regions/mapping.json").open("w") as f:
-        json.dump(pairs, f, indent=2)
+        # sort pairs alphabetically by cloud region
+        json.dump(sorted(pairs, key=lambda pair: (pair[0][0], pair[0][1])), f, indent=2)
 
 
 async def main() -> None:
