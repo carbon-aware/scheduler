@@ -29,7 +29,7 @@ async def regions() -> RegionResponse:
         try:
             power_zone = PowerZone(power_zone_dict["region"])
         except ValueError:
-            logger.info(f"Invalid power zone: {power_zone_dict}")
+            logger.info(f"Invalid power zone for provider {power_zone_dict.get('provider', 'unknown')}: {power_zone_dict['region']}")
             continue
 
         regions.update(convert_power_zone_to_cloud_zones(power_zone))
