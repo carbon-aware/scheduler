@@ -8,12 +8,6 @@ Carbon Aware Scheduler has been deployed with the following components:
    - Port: {{ .Values.scheduler.service.port }}
 {{- end }}
 
-{{- if .Values.memcached.enabled }}
-2. Memcached Service:
-   - Name: {{ include "scheduler.fullname" . }}-memcached
-   - Port: {{ .Values.memcached.service.port }}
-{{- end }}
-
 {{- if .Values.scheduler.enabled }}
 To access the Scheduler service:
 {{- if contains "NodePort" .Values.scheduler.service.type }}

@@ -69,38 +69,3 @@ scheduler:
     credentials:
       username: ""
       password: ""
-
-
-# Memcached configuration
-memcached:
-  enabled: true
-  replicaCount: 1
-  image:
-    repository: memcached
-    pullPolicy: IfNotPresent
-    tag: "1.6.18-alpine"
-  service:
-    type: ClusterIP
-    port: 11211
-  resources:
-    limits:
-      cpu: 500m
-      memory: 256Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
-  livenessProbe:
-    tcpSocket:
-      port: 11211
-    initialDelaySeconds: 30
-    periodSeconds: 10
-  readinessProbe:
-    tcpSocket:
-      port: 11211
-    initialDelaySeconds: 5
-    periodSeconds: 10
-  podAnnotations: {}
-  podLabels: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}

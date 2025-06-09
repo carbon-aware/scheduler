@@ -38,11 +38,6 @@ spec:
             - name: http
               containerPort: {{ .Values.scheduler.service.port }}
               protocol: TCP
-          env:
-            - name: MEMCACHED_HOST
-              value: {{ include "scheduler.fullname" . }}-memcached
-            - name: MEMCACHED_PORT
-              value: "{{ .Values.memcached.service.port }}"
           envFrom:
             - secretRef:
                 {{- if .Values.scheduler.watttime.existingSecret.name }}

@@ -34,11 +34,3 @@ k8s_resource(
     ],
     labels=['carbon-aware']
 )
-
-k8s_resource(
-    'scheduler-memcached',
-    port_forwards=[
-        port_forward(11211, 11211, name='scheduler-memcached'),
-    ],
-    labels=['carbon-aware']
-)
