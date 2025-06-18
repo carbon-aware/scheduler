@@ -611,15 +611,92 @@
   [
     [
       "ovh",
+      "ca-beauharnois"
+    ],
+    "HQ"
+  ],
+  [
+    [
+      "ovh",
+      "ca-toronto"
+    ],
+    "IESO_NORTH"
+  ],
+  [
+    [
+      "ovh",
+      "de-frankfurt"
+    ],
+    "DE"
+  ],
+  [
+    [
+      "ovh",
+      "fr-gravelines"
+    ],
+    "FR"
+  ],
+  [
+    [
+      "ovh",
+      "fr-paris"
+    ],
+    "FR"
+  ],
+  [
+    [
+      "ovh",
+      "fr-roubaix"
+    ],
+    "FR"
+  ],
+  [
+    [
+      "ovh",
       "fr-strasbourg"
     ],
-    "SOM"
+    "FR"
+  ],
+  [
+    [
+      "ovh",
+      "gb-london"
+    ],
+    "UK"
+  ],
+  [
+    [
+      "ovh",
+      "in-mumbai"
+    ],
+    "IND"
   ],
   [
     [
       "ovh",
       "pl-warsaw"
     ],
-    "SAU"
+    "PL"
+  ],
+  [
+    [
+      "ovh",
+      "sg-singapore"
+    ],
+    "SGP"
+  ],
+  [
+    [
+      "ovh",
+      "us-hillsboro"
+    ],
+    "PGE"
+  ],
+  [
+    [
+      "ovh",
+      "us-vint_hill"
+    ],
+    "PJM_DC"
   ]
 ]

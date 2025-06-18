@@ -5,6 +5,8 @@ import pathlib
 from typing import cast
 
 import httpx
+from shapely.geometry import Point, shape
+from shapely.geometry.base import BaseGeometry
 from src.utils.wattime import _get_auth_token
 
 logger = logging.getLogger(__name__)
@@ -13,30 +15,27 @@ logger = logging.getLogger(__name__)
 ELECTRICITY_MAPS_REGIONS_JSON = "https://raw.githubusercontent.com/electricitymaps/electricitymaps-contrib/refs/heads/master/config/data_centers/data_centers.json"
 
 
-async def region_from_loc(latitude: float, longitude: float, token: str) -> str | None:
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            "https://api.watttime.org/v3/region-from-loc",
-            headers={"Authorization": f"Bearer {token}"},
-            params={"latitude": latitude, "longitude": longitude, "signal_type": "co2_moer"},
-        )
+async def region_from_loc(
+    latitude: float, longitude: float, name: str, polygons: dict[str, BaseGeometry]
+) -> str | None:
+    for region, polygon in polygons.items():
+        if polygon.contains(Point(longitude, latitude)):
+            return region
 
-        if response.status_code != httpx.codes.OK:
-            logger.warning(
-                f"Failed to find region for ({latitude}, {longitude}): {response.status_code} {response.text}"
-            )
-            return None
-
-        return cast(str, response.json().get("region"))
+    logger.warning(f"No region found for {name} ({latitude}, {longitude})")
+    breakpoint()
+    return None
 
 
 async def electricity_map_zone_to_cloud_power_zone_pair(
-    region: dict, token: str
+    region: dict, polygons: dict[str, BaseGeometry]
 ) -> tuple[tuple[str, str], str | None]:
     provider: str = region["provider"]
     cloud_region: str = region["region"]
     lon, lat = region["lonlat"]
-    power_zone = await region_from_loc(latitude=lat, longitude=lon, token=token)
+    power_zone = await region_from_loc(
+        latitude=lat, longitude=lon, name=f"{provider}-{cloud_region}", polygons=polygons
+    )
 
     return (provider, cloud_region), power_zone
 
@@ -45,6 +44,19 @@ async def get_regions() -> list[dict]:
     async with httpx.AsyncClient() as client:
         response = await client.get(ELECTRICITY_MAPS_REGIONS_JSON)
         return cast(list[dict], response.json().values())
+
+
+async def get_polygons(token: str) -> dict[str, BaseGeometry]:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://api.watttime.org/v3/maps",
+            headers={"Authorization": f"Bearer {token}"},
+            params={"signal_type": "co2_moer"},
+        )
+        return {
+            feature["properties"]["region"]: shape(feature["geometry"])
+            for feature in response.json()["features"]
+        }
 
 
 async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
@@ -56,7 +68,7 @@ async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
         # sort power zones alphabetically
         power_zones_sorted = sorted(power_zones)
         for power_zone in power_zones_sorted:
-            f.write(f"    {power_zone} = '{power_zone}'\n")
+            f.write(f'    {power_zone} = "{power_zone}"\n')
 
     # Write cloud regions to files
     unique_providers = {pair[0][0] for pair in pairs}
@@ -69,7 +81,7 @@ async def write_regions(pairs: list[tuple[tuple[str, str], str]]) -> None:
             provider_regions_sorted = sorted(provider_regions)
             for cloud_region in provider_regions_sorted:
                 cloud_region_python = cloud_region.replace("-", "_")
-                f.write(f"    {cloud_region_python} = '{cloud_region}'\n")
+                f.write(f'    {cloud_region_python} = "{cloud_region}"\n')
 
     # Write cloud zone to power zone mapping to file
     with pathlib.Path("src/regions/mapping.json").open("w") as f:
@@ -83,8 +95,9 @@ async def main() -> None:
 
     # Map cloud regions to power zones
     token = await _get_auth_token()
+    polygons = await get_polygons(token)
     cloud_zone_to_power_zone_pairs = await asyncio.gather(
-        *[electricity_map_zone_to_cloud_power_zone_pair(region, token) for region in regions]
+        *[electricity_map_zone_to_cloud_power_zone_pair(region, polygons) for region in regions]
     )
 
     # Filter out None values
